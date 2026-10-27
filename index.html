@@ -1,184 +1,253 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>EnergyIQ: AI Energy-Saving Advisor</title>
+<title>AI Energy Saving Advisor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
-:root{--bg:#eef2f8;--sf:#fff;--tx:#0e1a33;--mu:#566785;--ln:#d9e1ee;--a1:#e29a00;--a2:#0b9a70;--a3:#2563eb;--a4:#e0483e;--a5:#7c5cf0;--a6:#8b99b3;--dial:#0e1a33;--dialtx:#ffd45c;--glow:rgba(245,163,0,.16);
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1122;--sf:#141f38;--tx:#f2f6fc;--mu:#9bacc9;--ln:#263556;--a1:#ffc93c;--a2:#2ed573;--a3:#5aa9ff;--a4:#ff6b6b;--a5:#a78bfa;--a6:#64748b;--dial:#050a16;--dialtx:#ffd45c;--glow:rgba(255,201,60,.12);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0a1122;--sf:#141f38;--tx:#f2f6fc;--mu:#9bacc9;--ln:#263556;--a1:#ffc93c;--a2:#2ed573;--a3:#5aa9ff;--a4:#ff6b6b;--a5:#a78bfa;--a6:#64748b;--dial:#050a16;--dialtx:#ffd45c;--glow:rgba(255,201,60,.12);color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
-*,*:before,*:after{box-sizing:border-box}
-body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font:400 16px/1.55 "DM Sans",system-ui,sans-serif}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
-.glow{position:fixed;width:520px;height:520px;border-radius:50%;background:radial-gradient(var(--glow),transparent 68%);top:-160px;right:-120px;pointer-events:none;animation:drift 14s ease-in-out infinite alternate}
-@keyframes drift{to{transform:translate(-80px,60px)}}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--ln)}
-.bar{max-width:1060px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:18px}
-.brand{font:800 20px "Bricolage Grotesque",sans-serif;display:flex;align-items:center;gap:9px;white-space:nowrap}
-.brand i{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--a1);color:#0e1a33;font-style:normal}
-nav{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
-nav button{border:0;background:none;color:var(--mu);font:500 15px "DM Sans",sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.2s}
-nav button:hover{color:var(--tx)}nav button[aria-selected=true]{background:var(--tx);color:var(--bg)}
-.tg{border:1px solid var(--ln);background:var(--sf);color:var(--tx);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--a3);outline-offset:2px}
-main{max-width:1060px;margin:auto;padding:28px 20px 60px;position:relative}
-section[hidden]{display:none}section{animation:tabin .45s ease}
-@keyframes tabin{from{opacity:0;transform:translateY(10px)}}
-h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;margin:0;line-height:1.1;letter-spacing:-.02em}
-h1{font-size:clamp(32px,5.4vw,54px);font-weight:800;max-width:15ch}
-h2{font-size:26px;font-weight:800;margin-bottom:6px}h3{font-size:18px;font-weight:600}
-.lead{color:var(--mu);max-width:56ch;margin:12px 0 0}
-.card{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:20px}
-.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;margin-bottom:26px}
-.meter{background:var(--dial);border-radius:22px;padding:22px;color:#cfd9ec;box-shadow:0 20px 50px -24px rgba(14,26,51,.6)}
-.meter small{display:block;margin-bottom:10px;color:#93a4c4}
-.odo{display:flex;gap:5px;align-items:center}
-.odo b{font:500 40px/1 "DM Mono",monospace;background:#18243f;color:var(--dialtx);padding:12px 9px;border-radius:7px;min-width:34px;text-align:center;border:1px solid #2a3a60}
-.odo span{font:500 18px "DM Mono";color:#93a4c4;margin-left:6px}
-.mrow{display:flex;justify-content:space-between;margin-top:16px;font-size:14px;color:#93a4c4}.mrow strong{display:block;font:600 20px "Bricolage Grotesque";color:#fff}
-.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 12px}
-.chip{border:1px solid var(--ln);background:var(--sf);color:var(--tx);border-radius:999px;padding:6px 13px;font:500 14px "DM Sans";cursor:pointer;transition:.2s}
-.chip:hover{border-color:var(--a1);transform:translateY(-1px)}
-.btn{border:0;background:var(--a1);color:#0e1a33;font:700 15px "DM Sans";padding:10px 18px;border-radius:12px;cursor:pointer;transition:.2s}
-.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn.alt{background:var(--sf);color:var(--tx);border:1px solid var(--ln)}
-.row{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 36px;gap:10px;align-items:end;padding:12px 0;border-bottom:1px solid var(--ln);animation:tabin .3s}
-.row:last-child{border:0}
-label{display:block;font-size:13px;color:var(--mu)}
-input{width:100%;margin-top:3px;padding:9px 11px;border:1px solid var(--ln);border-radius:10px;background:var(--bg);color:var(--tx);font:500 15px "DM Sans"}
-.del{border:0;background:none;color:var(--a4);font-size:20px;cursor:pointer;height:38px;border-radius:8px}.del:hover{background:var(--bg)}
-.tariff{display:flex;align-items:center;gap:10px;margin-top:14px;color:var(--mu);font-size:14px}.tariff input{width:90px;margin:0}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
-.kpi b{display:block;font:800 28px "Bricolage Grotesque";letter-spacing:-.02em}.kpi span{color:var(--mu);font-size:14px}
-.two{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:center}
-.donut{position:relative;width:280px;max-width:100%;margin:auto}.donut svg{width:100%;transform:rotate(-90deg)}
-.donut circle{fill:none;stroke-width:26;animation:seg 1.1s cubic-bezier(.2,.8,.2,1) both}
-@keyframes seg{from{stroke-dasharray:0 440}}
-.dc{position:absolute;inset:0;display:grid;place-content:center;text-align:center}.dc b{font:800 34px "Bricolage Grotesque"}.dc span{color:var(--mu);font-size:13px;max-width:12ch}
-.bars>div{margin:12px 0}.bars header{all:unset;display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
-.track{height:10px;border-radius:6px;background:var(--bg);overflow:hidden}.fill{height:100%;border-radius:6px;animation:grow 1s cubic-bezier(.2,.8,.2,1) both;width:var(--w)}
-@keyframes grow{from{width:0}}
-.rec{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;margin:12px 0;transition:.25s}.rec.off{opacity:.45}
-.tag{display:inline-block;font:500 12px "DM Mono";padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--a3);margin-right:6px}
-.sw{position:relative;width:46px;height:26px;border-radius:99px;background:var(--ln);border:0;cursor:pointer;transition:.25s}
-.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.25s}
-.sw[aria-checked=true]{background:var(--a2)}.sw[aria-checked=true]::after{transform:translateX(20px)}
-.save b{font:800 22px "Bricolage Grotesque";color:var(--a2);display:block;text-align:right}.save span{font-size:13px;color:var(--mu)}
-.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:16px 0 26px}
-.pipe .card{padding:16px;position:relative}.pipe .card:not(:last-child)::after{content:"›";position:absolute;right:-12px;top:50%;font-size:26px;color:var(--a1);z-index:2;margin-top:-16px}
-.pipe b{display:block;margin-bottom:4px;font-family:"Bricolage Grotesque"}.pipe span{font-size:14px;color:var(--mu)}
-code,.f{font-family:"DM Mono",monospace;font-size:14px}
-.f{display:block;background:var(--bg);padding:10px 14px;border-radius:10px;margin:8px 0}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:520px}
-th{text-align:left;font-size:13px;color:var(--mu);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--ln)}
-td{padding:10px;border-bottom:1px solid var(--ln);font-variant-numeric:tabular-nums}
-.ok{color:var(--a2);font-weight:700;opacity:0;transition:.3s}.ok.on{opacity:1}
-.empty{text-align:center;color:var(--mu);padding:40px 10px}
-.note{font-size:13px;color:var(--mu);margin-top:16px}
-@media(max-width:820px){.hero,.two,.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.pipe{grid-template-columns:1fr}.pipe .card::after{display:none}
-.row{grid-template-columns:1fr 1fr 1fr 36px}.row>div:first-child{grid-column:1/-1}.rec{grid-template-columns:auto 1fr}.rec .save{grid-column:1/-1}.save b{text-align:left}.brand span{display:none}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#e9eee9;--card:#fff;--ink:#12261a;--mut:#6b7d72;--g:#0e4a2b;--g2:#1f7a45;--g3:#9cc9ae;--lime:#c8f169;--line:#e2e8e3;--warn:#d9822b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c120e;--card:#16201a;--ink:#e8f0ea;--mut:#8da196;--g:#0e4a2b;--g2:#4fb176;--g3:#2f5a41;--line:#243229}}
+:root[data-theme="dark"]{--bg:#0c120e;--card:#16201a;--ink:#e8f0ea;--mut:#8da196;--g:#0e4a2b;--g2:#4fb176;--g3:#2f5a41;--line:#243229}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:16px;max-width:1200px;margin:auto}
+aside{background:var(--card);border-radius:20px;padding:18px 12px;height:fit-content;position:sticky;top:16px}
+.logo{display:flex;gap:8px;align-items:center;font-weight:700;padding:0 8px 16px}
+.logo i{width:28px;height:28px;border-radius:9px;background:var(--g);display:grid;place-items:center;color:var(--lime);font-style:normal}
+nav button{all:unset;display:flex;gap:10px;align-items:center;width:100%;padding:10px;border-radius:12px;color:var(--mut);cursor:pointer;box-sizing:border-box;font-weight:500}
+nav button.on{background:var(--g);color:#fff}
+nav button:focus-visible{outline:2px solid var(--g2)}
+main{display:flex;flex-direction:column;gap:14px;min-width:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h1{font-size:22px;margin:0}h2{font-size:15px;margin:0 0 10px}
+.sub{color:var(--mut);font-size:12px}
+.btn{border:0;border-radius:999px;padding:9px 16px;background:var(--g);color:#fff;cursor:pointer;font:inherit;font-weight:600}
+.btn.l{background:var(--lime);color:#12301d}.btn.o{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(12,1fr)}
+.card{background:var(--card);border-radius:20px;padding:16px;min-width:0}
+.dark{background:var(--g);color:#fff}.dark .sub{color:#b9d9c5}
+.c4{grid-column:span 4}.c5{grid-column:span 5}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+.big{font-size:30px;font-weight:700;letter-spacing:-.5px}.big small{font-size:13px;font-weight:500;opacity:.7}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600;background:var(--lime);color:#12301d}
+.pill.w{background:#fbe3c8;color:#8a4a0b}
+.bars{display:flex;align-items:flex-end;gap:7px;height:150px;padding-top:8px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bar div{width:100%;max-width:26px;border-radius:99px;background:var(--g3);position:relative}
+.bar div.a{background:var(--g2)}.bar div.an{background:var(--warn)}
+.bar span{font-size:10px;color:var(--mut)}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-top:8px}.leg b{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.rec{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:8px}
+.rec.done{opacity:.5}.rec .n{width:28px;height:28px;border-radius:50%;background:var(--g);color:var(--lime);display:grid;place-items:center;font-weight:700;flex:none}
+.rec p{margin:2px 0;color:var(--mut);font-size:12.5px}.rec .act{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.rec .act button{padding:5px 12px;font-size:12px}
+.score{margin-left:auto;text-align:right;font-weight:700;flex:none}
+.chat{display:flex;flex-direction:column;height:430px}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:4px}
+.m{max-width:85%;padding:9px 13px;border-radius:14px;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--g);color:#fff}.m.b{align-self:flex-start;background:var(--bg)}
+.in{display:flex;gap:8px;margin-top:10px}.in input{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:10px 14px;font:inherit}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chips button{font-size:12px;padding:5px 11px}
+.sl label{display:flex;justify-content:space-between;margin:10px 0 2px}.sl input{width:100%;accent-color:var(--g2)}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}
+.ov{overflow-x:auto}.hide{display:none}
+@media(max-width:820px){.app{grid-template-columns:1fr}aside{position:static;display:flex;overflow-x:auto;padding:8px}.logo{display:none}nav{display:flex;gap:4px}nav button{white-space:nowrap}
+.c4,.c5,.c7,.c8{grid-column:span 12}}
+/* ===== White & green theme + motion ===== */
+html:root:not([data-theme="light"]),html:root[data-theme="dark"],:root{color-scheme:light;--bg:#f3faf5;--card:#ffffff;--ink:#0d2b1b;--mut:#5d7a69;--g:#0b5d34;--g2:#1f9d55;--g3:#bfe6cc;--lime:#d6f5a0;--line:#e3f0e7;--warn:#e8892b}
+body{font-family:"Plus Jakarta Sans","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;z-index:0;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.55}
+body::before{width:420px;height:420px;left:-120px;top:-100px;background:#c9f0d6;animation:float 14s ease-in-out infinite}
+body::after{width:360px;height:360px;right:-100px;bottom:-80px;background:#e6f8bd;animation:float 17s ease-in-out infinite reverse}
+.app{position:relative;z-index:1}
+@keyframes float{50%{transform:translate(40px,30px) scale(1.12)}}
+@keyframes up{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,157,85,.5)}100%{box-shadow:0 0 0 9px rgba(31,157,85,0)}}
+@keyframes shine{from{background-position:-200% 0}to{background-position:200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+aside,.card{border:1px solid var(--line);box-shadow:0 6px 24px -12px rgba(11,93,52,.18);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 34px -14px rgba(11,93,52,.28)}
+.grid>.card{animation:up .65s cubic-bezier(.2,.8,.2,1) both}
+.grid>.card:nth-child(1){animation-delay:.02s}.grid>.card:nth-child(2){animation-delay:.08s}.grid>.card:nth-child(3){animation-delay:.14s}.grid>.card:nth-child(4){animation-delay:.2s}.grid>.card:nth-child(5){animation-delay:.26s}.grid>.card:nth-child(6){animation-delay:.32s}.grid>.card:nth-child(7){animation-delay:.38s}
+aside{animation:up .6s both}header{animation:up .6s .05s both}
+.logo i{background:linear-gradient(135deg,#0b5d34,#1f9d55);box-shadow:0 6px 14px -4px rgba(31,157,85,.6);animation:pulse 2.4s infinite}
+nav button{transition:background .3s,color .3s,transform .25s}
+nav button:hover{background:var(--bg);color:var(--g);transform:translateX(4px)}
+nav button.on{background:linear-gradient(135deg,#0b5d34,#1f9d55);color:#fff;box-shadow:0 8px 18px -8px rgba(11,93,52,.7)}
+.btn{background:linear-gradient(135deg,#0b5d34,#1f9d55);transition:transform .2s,box-shadow .25s,filter .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px -8px rgba(11,93,52,.6);filter:brightness(1.06)}.btn:active{transform:scale(.96)}
+.btn.l{background:linear-gradient(135deg,#d6f5a0,#b8ec6a);color:#0b3a20}.btn.o{background:#fff;color:var(--g);border:1px solid var(--g3)}
+h1{font-weight:800;letter-spacing:-.6px;background:linear-gradient(90deg,#0b5d34,#1f9d55);-webkit-background-clip:text;background-clip:text;color:transparent}
+#stamp::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g2);margin-right:7px;animation:pulse 1.8s infinite}
+.dark{position:relative;overflow:hidden;background:linear-gradient(140deg,#0b5d34 0%,#14803f 60%,#2aa75d 100%);border-color:transparent}
+.dark>*{position:relative;z-index:1}
+.blob{position:absolute!important;z-index:0!important;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(214,245,160,.55),transparent 70%);animation:float 8s ease-in-out infinite}
+.big{font-weight:800}
+#ring{transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 4px 8px rgba(31,157,85,.35))}
+#bars:not(.ready) .bar>div>div{transform-origin:bottom;animation:grow .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*70ms)}
+.bar>div>div{transition:transform .25s,filter .25s}.bar:hover>div>div{transform:scaleY(1.05);filter:brightness(1.1)}
+.rec{background:linear-gradient(180deg,#fff,#f8fcf9);transition:transform .3s,border-color .3s,box-shadow .3s;animation:pop .45s both}
+.rec:hover{transform:translateX(5px);border-color:var(--g3);box-shadow:0 8px 20px -12px rgba(11,93,52,.4)}
+.rec .n{background:linear-gradient(135deg,#0b5d34,#1f9d55)}
+.pill{background:linear-gradient(90deg,#d6f5a0,#c4f080)}.pill.w{background:#fde7cd;animation:pulse 2s infinite;--x:0}
+.m{animation:pop .35s both}.m.u{background:linear-gradient(135deg,#0b5d34,#1f9d55);box-shadow:0 6px 14px -8px rgba(11,93,52,.7)}.m.b{background:#eef8f1;border:1px solid var(--line)}
+.in input{transition:border-color .25s,box-shadow .25s}.in input:focus{outline:0;border-color:var(--g2);box-shadow:0 0 0 4px rgba(31,157,85,.15)}
+tr{transition:background .2s}tr:hover td{background:#f2faf5}
+input[type=range]{height:6px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style></head><body>
-<div class="glow"></div>
-<header><div class="bar">
-<div class="brand"><i>⚡</i><span>EnergyIQ</span></div>
-<nav role="tablist" aria-label="Sections">
-<button role="tab" id="t-advisor" aria-selected="true">Advisor</button>
-<button role="tab" id="t-insights" aria-selected="false">Insights</button>
-<button role="tab" id="t-savings" aria-selected="false">Savings plan</button>
-<button role="tab" id="t-how" aria-selected="false">How it works</button>
-<button role="tab" id="t-tests" aria-selected="false">Evaluation</button></nav>
-<button class="tg" id="theme" aria-label="Toggle light or dark theme">◐</button></div></header>
+<div class="app">
+<aside><div class="logo"><i>⚡</i>Energix AI</div>
+<nav id="nav"></nav></aside>
 <main>
-<section id="advisor" role="tabpanel">
-<div class="hero"><div><h1>See where every unit of electricity goes</h1>
-<p class="lead">Enter your appliances. The advisor ranks what costs you most and shows how many units and rupees you can save.</p></div>
-<div class="meter"><small>Estimated consumption</small><div class="odo" id="odo"></div>
-<div class="mrow"><div>Bill estimate<strong id="m-bill">₹0</strong></div><div>Next 30 days<strong id="m-mon">0 kWh</strong></div><div>Appliances<strong id="m-n">0</strong></div></div></div></div>
-<div class="card"><h2>Your appliances</h2>
-<div class="tools"><span style="color:var(--mu);font-size:14px">Quick add</span><span id="chips"></span></div>
-<div id="rows"></div>
-<div class="tools" style="margin-bottom:0"><button class="btn alt" id="add">Add blank row</button><button class="btn alt" id="sample">Load sample home</button><button class="btn alt" id="clear">Clear all</button><button class="btn" id="go">See insights</button></div>
-<div class="tariff">Tariff <input id="tariff" type="number" min="0" step="0.5" value="7" aria-label="Tariff in rupees per kWh"> ₹ per kWh</div></div></section>
+<header><div><h1 id="ttl">Energy Dashboard</h1><div class="sub" id="stamp">Analysis updated · demo data</div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><label class="btn o" style="cursor:pointer">Import CSV<input id="csv" type="file" accept=".csv,.txt" hidden></label><button class="btn l" id="demo">Reset demo data</button></div></header>
 
-<section id="insights" role="tabpanel" hidden><h2>Insights</h2><p class="lead" style="margin-top:0">Which appliances drive your consumption.</p><div id="ins"></div></section>
-<section id="savings" role="tabpanel" hidden><h2>Savings plan</h2><p class="lead" style="margin-top:0">Switch recommendations on or off to see the effect.</p><div id="sav"></div></section>
+<section id="v-overview" class="grid">
+ <div class="card dark c4"><span class="blob"></span><div class="sub">Today’s consumption</div><div class="big" id="today">—</div><div class="sub" id="vsExp"></div></div>
+ <div class="card c4"><div class="sub">Estimated saving potential</div><div class="big" id="pot">—</div><div class="sub">per day if top actions are done</div></div>
+ <div class="card c4"><div class="sub">Data quality · confidence</div><div class="big" id="conf">—</div><div class="sub" id="confN"></div></div>
+ <div class="card c4" style="display:flex;flex-direction:column;align-items:center"><h2 style="align-self:flex-start">Savings goal</h2>
+  <svg width="140" height="140" viewBox="0 0 140 140"><circle cx="70" cy="70" r="56" fill="none" stroke="var(--g3)" stroke-width="16" opacity=".5"/><circle id="ring" cx="70" cy="70" r="56" fill="none" stroke="var(--g2)" stroke-width="16" stroke-linecap="round" transform="rotate(-90 70 70)" stroke-dasharray="352" stroke-dashoffset="352"/><text id="ringT" x="70" y="78" text-anchor="middle" font-size="26" font-weight="700" fill="var(--ink)">0%</text></svg>
+  <div class="sub" id="goalT"></div></div>
+ <div class="card c8"><h2>Observed vs expected · kWh per 2-hour interval</h2><div class="bars" id="bars"></div>
+  <div class="leg"><span><b style="background:var(--g3)"></b>Expected</span><span><b style="background:var(--g2)"></b>Observed</span><span><b style="background:var(--warn)"></b>Anomaly</span></div></div>
+ <div class="card c7"><h2>Top actions</h2><div id="top"></div></div>
+ <div class="card c5"><h2>Findings</h2><div id="finds"></div></div>
+</section>
 
-<section id="how" role="tabpanel" hidden><h2>How it works</h2><p class="lead" style="margin-top:0">An intelligent agent: it perceives appliance data, reasons with rules, then acts by advising.</p>
-<div class="pipe"><div class="card"><b>Input</b><span>Appliance, watts, hours per day, days</span></div><div class="card"><b>Analysis</b><span>kWh per appliance and share of total</span></div><div class="card"><b>Prediction</b><span>30-day projection and bill</span></div><div class="card"><b>Rule engine</b><span>First matching IF–THEN rule fires</span></div><div class="card"><b>Output</b><span>Ranking, tips, savings</span></div></div>
-<div class="grid2"><div class="card"><h3>Formulas</h3><code class="f">kWh = watts × hours × days ÷ 1000</code><code class="f">share % = appliance kWh ÷ total × 100</code><code class="f">30-day kWh = watts × hours × 30 ÷ 1000</code><code class="f">bill = kWh × tariff</code></div>
-<div class="card"><h3>Rule base</h3><p style="margin:10px 0"><span class="tag">R1</span>Incandescent bulb → 9 W LED</p><p style="margin:10px 0"><span class="tag">R2</span>Geyser → use a timer, cut 15 min a day</p><p style="margin:10px 0"><span class="tag">R3</span>Share ≥ 30% and ≥ 4 h a day → cut 1 hour a day</p><p style="margin:10px 0"><span class="tag">R4</span>Always on (≥ 20 h) → check settings, about 5%</p><p style="margin:10px 0"><span class="tag">R5</span>Share ≥ 25% → reduce use by 10%</p></div></div>
-<p class="note">Educational prototype. Power ratings are treated as constant draw and the tariff is a flat rate, so real bills will differ.</p></section>
+<section id="v-analysis" class="grid hide">
+ <div class="card c12"><h2>Interval analysis</h2><div class="ov"><table id="tbl"></table></div>
+ <p class="sub">Pipeline: validate → baseline → residual (actual − expected) → anomaly. Flags only deviations above 20% and 0.15 kWh. No appliance-level claims are made from aggregate data.</p></div>
+</section>
 
-<section id="tests" role="tabpanel" hidden><h2>Evaluation</h2><p class="lead" style="margin-top:0">The engine runs in your browser against ten hand-calculated cases.</p>
-<div class="tools"><button class="btn" id="run">Run 10 test cases</button><b id="score" style="font:800 22px 'Bricolage Grotesque'"></b></div>
-<div class="card scroll"><table><thead><tr><th>Case</th><th>Appliances</th><th>Manual kWh</th><th>System kWh</th><th>Top consumer</th><th></th></tr></thead><tbody id="tb"></tbody></table></div></section>
-</main>
+<section id="v-recs" class="grid hide">
+ <div class="card c8"><h2>Ranked recommendations</h2><div id="recs"></div></div>
+ <div class="card c4 sl"><h2>Score = 0.40·S + 0.30·C + 0.20·E + 0.10·P</h2><div class="sub">Tune weights; the ranking updates live.</div><div id="sliders"></div>
+ <p class="sub">Safety rule: practical, non-harmful actions only. You approve every change.</p></div>
+</section>
+
+<section id="v-ai" class="grid hide">
+ <div class="card c8"><h2>Ask the AI Advisor</h2><div class="chat"><div class="msgs" id="msgs" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form class="in" id="f" onsubmit="return false"><input id="q" placeholder="Ask about your usage, peaks or savings…" autocomplete="off"><button class="btn" id="send">Send</button></form></div></div>
+ <div class="card c4"><h2>How it answers</h2><p class="sub">The advisor sees your current baseline, anomalies and action list, explains the evidence, shows uncertainty, and never claims appliance certainty from aggregate data. If the AI service is unavailable, a built-in rule engine answers instead.</p></div>
+</section>
+
+<section id="v-settings" class="grid hide">
+ <div class="card c12"><h2>Preferences &amp; privacy</h2>
+ <p class="sub">Tariff (₹ per kWh)</p><input id="tariff" type="number" value="8" step="0.5" style="padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)">
+ <p class="sub">Daily goal: cut waste by (%)</p><input id="goal" type="number" value="10" style="padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)">
+ <p class="sub">CSV format: <code>timestamp,kwh</code> (e.g. 2026-10-26 18:00,0.9). With several days, the last day is analysed against the average of earlier days. Data stays in your browser.</p></div>
+</section>
+</main></div>
 <script>
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const fmt=(n,d=1)=>n.toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
-const A=(name,watts,hours,days)=>({name,watts,hours,days});
-const PRE=[A("Air conditioner",1500,8,30),A("Refrigerator",150,24,30),A("Ceiling fan",75,10,30),A("Water heater (geyser)",2000,1,30),A("Incandescent bulb",60,5,30),A("LED bulb",9,6,30),A("Television",100,5,30),A("Washing machine",500,1,12),A("Laptop",65,8,30),A("Microwave",1200,.5,30)];
-const SAMPLE=[A("Air conditioner",1500,8,30),A("Refrigerator",150,24,30),A("Water heater (geyser)",2000,1,30),A("Ceiling fans (x4)",300,10,30),A("Incandescent bulbs (x4)",240,5,30),A("Washing machine",500,1,12),A("Television",100,5,30),A("Laptop",65,8,30),A("Microwave",1200,.5,30)];
-let rows=[],off=new Set(),tariff=7,dirty=true;
-function rec(r){const n=r.name.toLowerCase(),{watts:w,hours:h,days:d,share:s}=r;const o=(rule,text,k)=>({appliance:r.name,rule,text,kwh:k,month:k*30/d});
- if(n.includes("incandescent")&&w>9)return o("R1","Replace with a 9 W LED bulb",(w-9)*h*d/1000);
- if(/geyser|water heater/.test(n))return o("R2","Use a timer and cut 15 minutes a day",w*.25*d/1000);
- if(s>=30&&h>=4)return o("R3","Reduce usage by 1 hour a day",w*d/1000);
- if(h>=20)return o("R4","Keep at an efficient setting and check door seals (about 5%)",.05*r.kwh);
- if(s>=25)return o("R5","Reduce usage by 10%",.1*r.kwh);return null}
-function analyse(list,t=tariff){const rs=list.map(a=>({...a,kwh:a.watts*a.hours*a.days/1000,mon:a.watts*a.hours*30/1000}));const total=rs.reduce((x,r)=>x+r.kwh,0);
- rs.forEach(r=>r.share=total?100*r.kwh/total:0);rs.sort((a,b)=>b.kwh-a.kwh);const recs=rs.map(rec).filter(Boolean).sort((a,b)=>b.kwh-a.kwh);
- return{rs,total,bill:total*t,mon:rs.reduce((x,r)=>x+r.mon,0),recs}}
-function count(el,to,d=1,pre="",suf=""){const from=+el.dataset.v||0;el.dataset.v=to;if(matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=pre+fmt(to,d)+suf;return}
- const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/800),e=1-Math.pow(1-p,3);el.textContent=pre+fmt(from+(to-from)*e,d)+suf;if(p<1)requestAnimationFrame(f)})(t0)}
-/* advisor */
-function drawRows(){$("#rows").innerHTML=rows.length?rows.map((r,i)=>`<div class="row"><div><label>Appliance<input data-i="${i}" data-k="name" value="${esc(r.name)}"></label></div><div><label>Power (W)<input data-i="${i}" data-k="watts" type="number" min="0" value="${r.watts}"></label></div><div><label>Hours a day<input data-i="${i}" data-k="hours" type="number" min="0" max="24" step=".25" value="${r.hours}"></label></div><div><label>Days<input data-i="${i}" data-k="days" type="number" min="1" max="366" value="${r.days}"></label></div><button class="del" data-d="${i}" aria-label="Remove ${esc(r.name)}">×</button></div>`).join(""):`<div class="empty">No appliances yet. Pick one from Quick add or load the sample home.</div>`}
-function summary(){const a=analyse(rows),odo=$("#odo");const s=String(Math.round(a.total*10)).padStart(5,"0").slice(-5);
- odo.innerHTML=[...s].map((c,i)=>`<b>${c}</b>${i==3?"<span>.</span>":""}`).join("")+"<span>kWh</span>";
- const t=s.length;odo.querySelectorAll("b").forEach((b,i)=>{const tg=b.textContent;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;let k=0;const iv=setInterval(()=>{b.textContent=Math.floor(Math.random()*10);if(++k>6+i*3){clearInterval(iv);b.textContent=tg}},45)});
- count($("#m-bill"),a.bill,0,"₹");count($("#m-mon"),a.mon,0,"",' kWh');$("#m-n").textContent=rows.length;dirty=true}
-$("#chips").innerHTML=PRE.map((p,i)=>`<button class="chip" data-p="${i}">+ ${p.name}</button>`).join(" ");
-$("#chips").onclick=e=>{const i=e.target.dataset.p;if(i==null)return;rows.push({...PRE[i]});drawRows();summary()};
-$("#rows").oninput=e=>{const{i,k}=e.target.dataset;if(i==null)return;rows[i][k]=k=="name"?e.target.value:Math.max(0,+e.target.value||0);summary()};
-$("#rows").onclick=e=>{const d=e.target.dataset.d;if(d==null)return;rows.splice(+d,1);drawRows();summary()};
-$("#add").onclick=()=>{rows.push(A("New appliance",100,2,30));drawRows();summary()};
-$("#sample").onclick=()=>{rows=SAMPLE.map(a=>({...a}));drawRows();summary()};
-$("#clear").onclick=()=>{rows=[];drawRows();summary()};
-$("#tariff").oninput=e=>{tariff=+e.target.value||0;summary()};
-$("#go").onclick=()=>show("insights");
-/* insights */
-const COL=["--a1","--a3","--a2","--a4","--a5","--a6"];
-function insights(){const a=analyse(rows),el=$("#ins");if(!rows.length||!a.total){el.innerHTML=`<div class="card empty">Add appliances on the Advisor tab to see insights.</div>`;return}
- const top=a.rs.slice(0,5),oth=a.rs.slice(5).reduce((x,r)=>x+r.kwh,0),seg=[...top.map(r=>({n:r.name,k:r.kwh})),...(oth>0?[{n:"Others",k:oth}]:[])];
- let off2=0;const C=2*Math.PI*70;const circles=seg.map((s,i)=>{const L=C*s.k/a.total;const c=`<circle cx="100" cy="100" r="70" style="stroke:var(${COL[i]});stroke-dasharray:${Math.max(L-2,0)} ${C};stroke-dashoffset:${-off2};animation-delay:${i*.12}s"/>`;off2+=L;return c}).join("");
- el.innerHTML=`<div class="kpis"><div class="card kpi"><b id="k1">0</b><span>kWh used</span></div><div class="card kpi"><b id="k2">0</b><span>estimated bill</span></div><div class="card kpi"><b id="k3">0</b><span>kWh in the next 30 days</span></div><div class="card kpi"><b style="font-size:20px;line-height:1.3">${esc(a.rs[0].name)}</b><span>top consumer, ${fmt(a.rs[0].share)}%</span></div></div>
- <div class="card two"><div class="donut"><svg viewBox="0 0 200 200">${circles}</svg><div class="dc"><b>${fmt(a.rs[0].share,0)}%</b><span>${esc(a.rs[0].name)}</span></div></div>
- <div class="bars">${a.rs.map((r,i)=>`<div><header><span>${esc(r.name)}</span><span><b>${fmt(r.kwh)}</b> kWh · ${fmt(r.share)}%</span></header><div class="track"><div class="fill" style="--w:${r.share}%;background:var(${COL[Math.min(i,5)]});animation-delay:${i*.07}s"></div></div></div>`).join("")}</div></div>
- <p class="note">${a.rs[0].share>=30?`Heads up: ${esc(a.rs[0].name)} accounts for ${fmt(a.rs[0].share)}% of your consumption. Start there.`:"Your usage is spread across appliances. See the Savings plan for small wins."}</p>`;
- count($("#k1"),a.total,1);count($("#k2"),a.bill,0,"₹");count($("#k3"),a.mon,0)}
-/* savings */
-function savings(){const a=analyse(rows),el=$("#sav");if(!a.recs.length){el.innerHTML=`<div class="card empty">${rows.length?"No savings rule applies to these appliances.":"Add appliances on the Advisor tab first."}</div>`;return}
- el.innerHTML=`<div class="kpis"><div class="card kpi"><b id="s1">0</b><span>kWh saved in this period</span></div><div class="card kpi"><b id="s2">0</b><span>rupees saved in this period</span></div><div class="card kpi"><b id="s3">0</b><span>rupees saved per year</span></div><div class="card kpi"><b id="s4">0</b><span>kg CO₂ avoided per year (about 0.8 kg per kWh)</span></div></div><div id="rl">${a.recs.map((r,i)=>`<div class="card rec ${off.has(r.appliance)?"off":""}" data-a="${esc(r.appliance)}"><button class="sw" role="switch" aria-checked="${!off.has(r.appliance)}" data-s="${i}" aria-label="Apply ${esc(r.appliance)} tip"></button><div><h3>${esc(r.appliance)}</h3><div style="color:var(--mu)"><span class="tag">${r.rule}</span>${esc(r.text)}</div></div><div class="save"><b>${fmt(r.kwh)} kWh</b><span>₹${fmt(r.kwh*tariff,0)}</span></div></div>`).join("")}</div>
- <div class="card" style="margin-top:16px"><div class="bars"><div><header><span>Current</span><span><b>${fmt(a.total)}</b> kWh</span></header><div class="track"><div class="fill" style="--w:100%;background:var(--a6)"></div></div></div><div><header><span>After applying tips</span><span><b id="af">0</b> kWh</span></header><div class="track"><div class="fill" id="afb" style="--w:100%;background:var(--a2);transition:width .6s"></div></div></div></div></div>`;
- $("#rl").onclick=e=>{const b=e.target.closest(".sw");if(!b)return;const r=a.recs[+b.dataset.s];off.has(r.appliance)?off.delete(r.appliance):off.add(r.appliance);const on=!off.has(r.appliance);b.setAttribute("aria-checked",on);b.closest(".rec").classList.toggle("off",!on);tot()};
- function tot(){const ap=a.recs.filter(r=>!off.has(r.appliance)),k=ap.reduce((x,r)=>x+r.kwh,0),m=ap.reduce((x,r)=>x+r.month,0);count($("#s1"),k,1);count($("#s2"),k*tariff,0,"₹");count($("#s3"),m*12*tariff,0,"₹");count($("#s4"),m*12*.8,0);
-  count($("#af"),a.total-k,1);$("#afb").style.width=(100*(a.total-k)/a.total)+"%"}tot()}
-/* tests */
-const TESTS=[[[A("Air conditioner",1500,8,30)],360,"Air conditioner",100,45],[[A("Refrigerator",150,24,30)],108,"Refrigerator",100],[[A("Television",100,5,30),A("Ceiling fan",75,10,30)],37.5,"Ceiling fan",60],[[A("Water heater (geyser)",2000,1,30),A("Washing machine",500,1,8)],64,"Water heater (geyser)",93.75],[[A("Incandescent bulb",60,5,30),A("LED bulb",9,5,30)],10.35,"Incandescent bulb",86.96,7.65],[[A("Laptop",65,8,30),A("Microwave",1200,.5,30)],33.6,"Microwave",53.57],[[A("Air conditioner",1800,6,20),A("Ceiling fan",75,8,20)],228,"Air conditioner",94.74,36],[[A("Iron",1000,.5,10),A("Mixer grinder",500,.25,30)],8.75,"Iron",57.14],[[A("Water pump",750,2,30),A("Refrigerator",150,24,30)],153,"Refrigerator",70.59],[[A("Room heater",1500,3,15),A("LED bulb",9,6,15)],68.31,"Room heater",98.81]];
-function drawTests(){$("#tb").innerHTML=TESTS.map((t,i)=>`<tr><td>${i+1}</td><td>${t[0].map(a=>esc(a.name)).join(", ")}</td><td>${fmt(t[1],2)}</td><td class="sys">–</td><td>${esc(t[2])}</td><td><span class="ok">✓ Pass</span></td></tr>`).join("")}
-$("#run").onclick=()=>{drawTests();let pass=0;$("#score").textContent="";TESTS.forEach((t,i)=>setTimeout(()=>{const a=analyse(t[0],7),top=a.rs[0];let ok=Math.abs(a.total-t[1])<.01&&top.name==t[2]&&Math.abs(top.share-t[3])<.01;
- if(t[4]!=null){const r=a.recs.find(x=>x.appliance==t[0][0].name);ok=ok&&r&&Math.abs(r.kwh-t[4])<.01}
- const tr=$("#tb").rows[i];tr.querySelector(".sys").textContent=fmt(a.total,2);const s=tr.querySelector(".ok");s.textContent=ok?"✓ Pass":"✗ Fail";s.style.color=ok?"":"var(--a4)";s.classList.add("on");if(ok)pass++;$("#score").textContent=`${pass}/${i+1} passed`},i*260))};
-/* tabs */
-function show(id){$$("[role=tab]").forEach(b=>b.setAttribute("aria-selected",b.id=="t-"+id));$$("section").forEach(s=>s.hidden=s.id!=id);scrollTo({top:0,behavior:"smooth"});if(id=="insights")insights();if(id=="savings")savings();if(id=="tests")drawTests();try{history.replaceState(null,"","#"+id)}catch(e){}}
-$$("[role=tab]").forEach(b=>b.onclick=()=>show(b.id.slice(2)));
-$("nav").onkeydown=e=>{const t=$$("[role=tab]"),i=t.findIndex(b=>b.getAttribute("aria-selected")=="true");if(e.key=="ArrowRight"||e.key=="ArrowLeft"){const n=t[(i+(e.key=="ArrowRight"?1:t.length-1))%t.length];n.focus();n.click()}};
-$("#theme").onclick=()=>{const r=document.documentElement,d=matchMedia("(prefers-color-scheme: dark)").matches,cur=r.dataset.theme||(d?"dark":"light");r.dataset.theme=cur=="dark"?"light":"dark"};
-rows=SAMPLE.map(a=>({...a}));drawRows();summary();
-const h=(location.hash||"").slice(1);if(["insights","savings","how","tests"].includes(h))show(h);
+const $=id=>document.getElementById(id);
+const H=['00','02','04','06','08','10','12','14','16','18','20','22'];
+const DEMO_OBS=[.42,.34,.31,.48,.92,.76,.68,.74,.88,1.72,1.36,.82], DEMO_EXP=[.4,.35,.33,.45,.85,.72,.66,.7,.82,1.18,1.25,.78];
+let obs=[...DEMO_OBS],exp=[...DEMO_EXP],src='demo data',days=1;
+let W={S:.4,C:.3,E:.2,P:.1},state={},tariff=8,goal=10;
+const sum=a=>a.reduce((x,y)=>x+y,0), f2=x=>x.toFixed(2);
+const tabs=[['overview','▦','Overview','Energy Dashboard'],['analysis','◔','Analysis','Consumption Analysis'],['recs','✓','Actions','Recommendations'],['ai','✦','AI Advisor','AI Energy Advisor'],['settings','⚙','Settings','Preferences']];
+$('nav').innerHTML=tabs.map(t=>`<button data-t="${t[0]}">${t[1]} ${t[2]}</button>`).join('');
+function show(t){tabs.forEach(x=>$('v-'+x[0]).classList.toggle('hide',x[0]!==t));$('ttl').textContent=tabs.find(x=>x[0]===t)[3];
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.t)};
+
+function analyse(){
+ const res=obs.map((o,i)=>o-exp[i]);
+ const an=obs.map((o,i)=>res[i]>.15&&res[i]/exp[i]>.2);
+ const conf=days>=7?.9:days>=3?.75:days>1?.6:.5;
+ const nightIdle=(obs[0]+obs[1]+obs[2])/3, nightExp=(exp[0]+exp[1]+exp[2])/3;
+ const evening=[9,10].reduce((s,i)=>s+Math.max(res[i],0),0);
+ const midday=[5,6,7].reduce((s,i)=>s+Math.max(res[i],0),0);
+ const total=sum(obs),expT=sum(exp);
+ const recs=[];
+ if(nightIdle>nightExp*1.03||nightIdle>.3)recs.push({id:'standby',t:'Check night-time standby loads',ev:`Idle baseline ${f2(nightIdle)} kWh/interval vs ${f2(nightExp)} expected.`,eff:'Low',S:Math.min(1,(nightIdle-.15)*2.5),C:conf,E:.9,P:.7,save:Math.max(.2,(nightIdle-.2)*3)});
+ if(evening>.1||an[9]||an[10])recs.push({id:'shift',t:'Shift flexible appliance schedules',ev:`Evening (18–22h) is ${f2(evening)} kWh above baseline.`,eff:'Medium',S:Math.min(1,evening/1.2),C:conf*.95,E:.6,P:.6,save:evening*.6});
+ recs.push({id:'cool',t:'Review cooling or heating schedules',ev:`Long high-load periods from 08h to 18h (${f2(sum(obs.slice(4,9)))} kWh).`,eff:'Medium',S:.45,C:conf*.8,E:.6,P:.5,save:Math.max(.2,midday+.15)});
+ recs.push({id:'equip',t:'Investigate equipment replacement',ev:'Sustained evidence needed over weeks before acting.',eff:'High',S:.6,C:conf*.5,E:.2,P:.4,save:.3});
+ return{res,an,conf,recs,total,expT,nightIdle,evening}
+}
+let A;
+const score=r=>W.S*r.S+W.C*r.C+W.E*r.E+W.P*r.P;
+const ranked=()=>A.recs.filter(r=>state[r.id]!=='dismissed').sort((a,b)=>score(b)-score(a));
+
+function recHTML(r,i,full){const st=state[r.id];
+ return `<div class="rec ${st==='done'?'done':''}"><div class="n">${i+1}</div><div><b>${r.t}</b><p>Why: ${r.ev}</p><p>Effort: ${r.eff} · Confidence ${Math.round(r.C*100)}% · ~${f2(r.save)} kWh/day (₹${(r.save*tariff).toFixed(0)})</p>
+ <div class="act"><button class="btn ${st==='done'?'o':''}" data-a="done" data-id="${r.id}">${st==='done'?'Undo':'Mark as done'}</button><button class="btn o" data-a="dismiss" data-id="${r.id}">Dismiss</button></div></div><div class="score">${score(r).toFixed(2)}</div></div>`}
+
+function render(){
+ A=analyse();
+ $('today').innerHTML=f2(A.total)+' <small>kWh</small>';
+ const d=A.total-A.expT;$('vsExp').textContent=`${d>=0?'+':''}${f2(d)} kWh (${(d/A.expT*100).toFixed(0)}%) vs expected`;
+ const open=ranked().filter(r=>state[r.id]!=='done');
+ const pot=sum(open.slice(0,3).map(r=>r.save));$('pot').innerHTML=f2(pot)+' <small>kWh</small>';
+ $('conf').textContent=Math.round(A.conf*100)+'%';$('confN').textContent=`${days} day${days>1?'s':''} of ${src}${A.conf<.6?' · lower confidence':''}`;
+ const done=sum(A.recs.filter(r=>state[r.id]==='done').map(r=>r.save)), waste=Math.max(.1,Math.max(0,d)+.4);
+ const pct=Math.min(100,Math.round(done/(waste*goal/10)*100));
+ $('ring').style.strokeDashoffset=352*(1-pct/100);$('ringT').textContent=pct+'%';$('goalT').textContent=`Goal: cut waste by ${goal}%`;
+ const mx=Math.max(...obs,...exp);
+ $('bars').innerHTML=obs.map((o,i)=>`<div class="bar" title="${H[i]}h: ${f2(o)} observed, ${f2(exp[i])} expected"><div style="height:${exp[i]/mx*100*.8}%"></div><div class="${A.an[i]?'an':'a'}" style="height:${o/mx*100*.8}%;margin-top:-${o/mx*100*.8}%;opacity:.9"></div><span>${H[i]}</span></div>`).join('');
+ // overlay bars: simpler stacked rendering
+ $('bars').innerHTML=obs.map((o,i)=>`<div class="bar" title="${H[i]}h: ${f2(o)} observed / ${f2(exp[i])} expected"><div style="display:flex;gap:2px;align-items:flex-end;height:120px;background:none;width:auto;max-width:none"><div style="width:9px;height:${exp[i]/mx*100}%;background:var(--g3);border-radius:99px"></div><div style="width:9px;height:${o/mx*100}%;background:${A.an[i]?'var(--warn)':'var(--g2)'};border-radius:99px"></div></div><span>${H[i]}</span></div>`).join('');
+ $('top').innerHTML=ranked().slice(0,2).map((r,i)=>recHTML(r,i)).join('')||'<p class="sub">All caught up.</p>';
+ const fs=[];A.an.forEach((a,i)=>a&&fs.push(`<p><span class="pill w">Anomaly</span> ${H[i]}:00–${String((+H[i]+2)%24).padStart(2,'0')}:00 — ${f2(obs[i])} kWh, ${(A.res[i]/exp[i]*100).toFixed(0)}% above expected.</p>`));
+ if(A.nightIdle>.3)fs.push(`<p><span class="pill w">Idle load</span> Night baseline ${f2(A.nightIdle)} kWh per interval.</p>`);
+ $('finds').innerHTML=fs.join('')||'<p><span class="pill">Normal</span> No unusual periods found.</p>';
+ $('tbl').innerHTML='<tr><th>Interval</th><th>Observed</th><th>Expected</th><th>Residual</th><th>Status</th></tr>'+obs.map((o,i)=>`<tr><td>${H[i]}:00</td><td>${f2(o)}</td><td>${f2(exp[i])}</td><td>${A.res[i]>=0?'+':''}${f2(A.res[i])}</td><td>${A.an[i]?'<span class="pill w">Anomaly</span>':'<span class="pill">OK</span>'}</td></tr>`).join('');
+ $('recs').innerHTML=ranked().map((r,i)=>recHTML(r,i)).join('');
+ $('stamp').textContent=`Analysis updated · ${src}`;
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const id=b.dataset.id;
+ state[id]=b.dataset.a==='dismiss'?'dismissed':(state[id]==='done'?'':'done');render()});
+$('sliders').innerHTML=Object.keys(W).map(k=>`<label><span>${{S:'Saving potential',C:'Confidence',E:'Ease',P:'Preference'}[k]}</span><b id="w${k}">${W[k]}</b></label><input type="range" min="0" max="100" value="${W[k]*100}" data-w="${k}" aria-label="${k} weight">`).join('');
+$('sliders').oninput=e=>{const k=e.target.dataset.w;if(!k)return;W[k]=e.target.value/100;$('w'+k).textContent=W[k].toFixed(2);render()};
+$('tariff').onchange=e=>{tariff=+e.target.value||8;render()};$('goal').onchange=e=>{goal=+e.target.value||10;render()};
+$('demo').onclick=()=>{obs=[...DEMO_OBS];exp=[...DEMO_EXP];src='demo data';days=1;state={};render()};
+
+$('csv').onchange=async e=>{const t=await e.target.files[0].text();
+ const rows=t.split(/\r?\n/).map(l=>l.split(',')).filter(r=>r.length>=2&&!isNaN(+r[1])&&r[1].trim()!==''&&!isNaN(Date.parse(r[0].trim().replace(' ','T'))));
+ if(rows.length<12){alert('Need at least 12 valid rows in timestamp,kwh format. Using current data.');return}
+ const byDay={};rows.forEach(r=>{const d=new Date(r[0].trim().replace(' ','T'));const k=d.toISOString().slice(0,10);const b=Math.floor(d.getHours()/2);const v=+r[1];if(v<0||v>100)return;(byDay[k]=byDay[k]||Array.from({length:12},()=>[]))[b].push(v)});
+ const ks=Object.keys(byDay).sort(),agg=d=>d.map(x=>x.length?sum(x):null);
+ const last=agg(byDay[ks[ks.length-1]]),prev=ks.slice(0,-1).map(k=>agg(byDay[k]));
+ const hist=last.map((_,i)=>{const v=prev.map(p=>p[i]).filter(x=>x!=null);return v.length?sum(v)/v.length:null});
+ const fill=a=>a.map((v,i)=>v!=null?v:(a.filter(x=>x!=null).length?sum(a.filter(x=>x!=null))/a.filter(x=>x!=null).length:0));
+ obs=fill(last);exp=prev.length?fill(hist).map((v,i)=>v||obs[i]):obs.map(v=>v*.95);days=ks.length;src='your CSV';state={};render()};
+
+// ---------- AI advisor ----------
+const msgs=$('msgs');let hist=[];
+function add(c,t){const d=document.createElement('div');d.className='m '+c;d.textContent=t;msgs.appendChild(d);msgs.scrollTop=1e9;return d}
+add('b','Hi! I’m your AI Energy Advisor. Ask me why your usage is high, what to do first, or how much you could save.');
+const sugg=['Why is my evening usage high?','What should I do first?','How much can I save?','Explain my confidence score'];
+$('chips').innerHTML=sugg.map(s=>`<button class="btn o" type="button">${s}</button>`).join('');
+$('chips').onclick=e=>{if(e.target.tagName==='BUTTON'){$('q').value=e.target.textContent;ask()}};
+function ctx(){return `Daily total ${f2(A.total)} kWh vs expected ${f2(A.expT)}. Tariff ₹${tariff}/kWh. Data: ${days} day(s) from ${src}, confidence ${Math.round(A.conf*100)}%.
+Intervals (hour: observed/expected): ${obs.map((o,i)=>H[i]+'h '+f2(o)+'/'+f2(exp[i])).join(', ')}.
+Anomalies: ${A.an.map((a,i)=>a?H[i]+'h':'').filter(Boolean).join(', ')||'none'}.
+Ranked actions: ${ranked().map((r,i)=>`${i+1}. ${r.t} (${r.ev} effort ${r.eff}, ~${f2(r.save)} kWh/day, status ${state[r.id]||'open'})`).join(' | ')}`}
+function local(q){q=q.toLowerCase();const r=ranked().filter(x=>state[x.id]!=='done');
+ if(/evening|peak|18|night|high/.test(q)&&A.evening>.05)return `Your evening (18–22h) runs ${f2(A.evening)} kWh above the expected baseline. That pattern usually comes from several flexible loads running together. I can’t tell which appliances from aggregate data. Try staggering washing, charging or water heating outside 18–22h and compare tomorrow.`;
+ if(/first|start|priority|top/.test(q)&&r[0])return `Start with “${r[0].t}”. ${r[0].ev} Effort is ${r[0].eff.toLowerCase()} and it could save about ${f2(r[0].save)} kWh/day (₹${(r[0].save*tariff).toFixed(0)}).`;
+ if(/save|saving|cost|bill/.test(q)){const p=sum(r.slice(0,3).map(x=>x.save));return `Doing the top three open actions could save roughly ${f2(p)} kWh/day, about ₹${(p*tariff).toFixed(0)}/day at ₹${tariff}/kWh. This is an estimate and should be verified against a fair baseline.`}
+ if(/confiden|accura|trust/.test(q))return `Confidence is ${Math.round(A.conf*100)}% because ${days} day(s) of data were used. More history improves it. With little data I use a simpler baseline and avoid appliance-specific claims.`;
+ return `Today you used ${f2(A.total)} kWh vs ${f2(A.expT)} expected. ${r[0]?'Your top open action is “'+r[0].t+'”.':'All actions are done.'} Ask me about peaks, savings or what to do first.`}
+async function ask(){const q=$('q').value.trim();if(!q)return;$('q').value='';add('u',q);hist.push({role:'user',content:q});
+ const b=add('b','Thinking…');let out;
+ try{const s=await claude.use('sample');if(!s)throw 0;
+  const prompt=[{role:'user',content:`You are the AI Energy Saving Advisor in a home energy app. Use only this analysis data. Be concise (under 120 words), practical, explain evidence, state uncertainty, never claim appliance certainty from aggregate data, suggest only safe actions the user approves.\n\nDATA:\n${ctx()}\n\nConversation so far then the new question:`},{role:'assistant',content:'Understood.'},...hist.slice(-6)];
+  const r=await s(prompt,{cache:false,modelTier:'quick',onText:({text})=>{b.textContent=text}});out=r.text}
+ catch(e){out=local(q)}
+ b.textContent=out;hist.push({role:'assistant',content:out});msgs.scrollTop=1e9}
+$('f').onsubmit=ask;$('send').onclick=ask;
+show('overview');render();
+function countUp(el){const n=[...el.childNodes].find(x=>x.nodeType===3);if(!n)return;const m=n.nodeValue.match(/[\d.]+/);if(!m)return;const to=parseFloat(m[0]),dp=(m[0].split('.')[1]||'').length,pre=n.nodeValue.slice(0,m.index),post=n.nodeValue.slice(m.index+m[0].length),t0=performance.now();
+ (function s(t){const p=Math.min(1,(t-t0)/1200),e=1-Math.pow(1-p,3);n.nodeValue=pre+(to*e).toFixed(dp)+post;if(p<1)requestAnimationFrame(s)})(t0)}
+['today','pot','conf','ringT'].forEach(i=>countUp($(i)));
+document.querySelectorAll('#bars .bar').forEach((b,i)=>b.style.setProperty('--i',i));
+{const r=$('ring'),o=r.style.strokeDashoffset;r.style.strokeDashoffset=352;requestAnimationFrame(()=>requestAnimationFrame(()=>r.style.strokeDashoffset=o))}
+setTimeout(()=>$('bars').classList.add('ready'),1800);
 </script></body></html>

@@ -257,15 +257,20 @@ function local(q){q=q.toLowerCase();const r=ranked().filter(x=>state[x.id]!=='do
  if(/first|start|priority|top/.test(q)&&r[0])return `Start with “${r[0].t}”. ${r[0].ev} Effort is ${r[0].eff.toLowerCase()} and it could save about ${f2(r[0].save)} kWh/day (₹${(r[0].save*tariff).toFixed(0)}).`;
  if(/save|saving|cost|bill/.test(q)){const p=sum(r.slice(0,3).map(x=>x.save));return `Doing the top three open actions could save roughly ${f2(p)} kWh/day, about ₹${(p*tariff).toFixed(0)}/day at ₹${tariff}/kWh. This is an estimate and should be verified against a fair baseline.`}
  if(/confiden|accura|trust/.test(q))return `Confidence is ${Math.round(A.conf*100)}% because ${days} day(s) of data were used. More history improves it. With little data I use a simpler baseline and avoid appliance-specific claims.`;
- return `Today you used ${f2(A.total)} kWh vs ${f2(A.expT)} expected. ${r[0]?'Your top open action is “'+r[0].t+'”.':'All actions are done.'} Ask me about peaks, savings or what to do first.`}
+ if(/anomal|unusual|spike|abnormal|wrong/.test(q)){const l=A.an.map((a,i)=>a?H[i]+':00':'').filter(Boolean);return l.length?`Unusual blocks today: ${l.join(', ')}. Each is more than 20% and 0.15 kWh above your expected baseline.`:'No unusual blocks today. Every 2-hour interval is within the expected range.'}
+ if(/geyser|heater|cooling|heating|appliance|fridge|washing|air cond|fan|light/.test(q))return `I can't see individual appliances in aggregate data, but long high-load periods usually come from cooling, heating or water heating. See the Actions page and compare tomorrow's readings after changing one thing at a time.`;
+ if(/total|today|used|usage|consum|how much/.test(q))return `Today you used ${f2(A.total)} kWh against an expected ${f2(A.expT)} kWh, about ₹${(A.total*tariff).toFixed(0)} at ₹${tariff}/kWh.`;
+ if(/how|work|method|calculat|baseline|expected/.test(q))return `Expected usage is the average of your previous days for each 2-hour block, or a typical household profile if no history was entered. A block is flagged when it is over 20% and 0.15 kWh above expected.`;
+ if(/hello|hi|hey|thank/.test(q))return `Hello! Ask me about your peaks, anomalies, savings, what to do first, or your confidence score.`;
+ return `(Offline mode: the AI service is not connected, so I can only answer common topics.) Today you used ${f2(A.total)} kWh vs ${f2(A.expT)} expected. ${r[0]?'Your top open action is “'+r[0].t+'”.':'All actions are done.'} Ask me about peaks, savings or what to do first.`}
 async function ask(){const q=$('q').value.trim();if(!q)return;$('q').value='';add('u',q);hist.push({role:'user',content:q});
  const b=add('b','Thinking…');let out;
  try{const s=await claude.use('sample');if(!s)throw 0;
-  const prompt=[{role:'user',content:`You are the AI Energy Saving Advisor in a home energy app. Use only this analysis data. Be concise (under 120 words), practical, explain evidence, state uncertainty, never claim appliance certainty from aggregate data, suggest only safe actions the user approves.\n\nDATA:\n${ctx()}\n\nConversation so far then the new question:`},{role:'assistant',content:'Understood.'},...hist.slice(-6)];
+  const prompt=[{role:'user',content:`You are the AI Energy Saving Advisor in a home energy app. Use only this analysis data. Be concise (under 120 words), practical, explain evidence, state uncertainty, never claim appliance certainty from aggregate data, suggest only safe actions the user approves.\n\nDATA:\n${ctx()}\n\nConversation so far then the new question:`},{role:'assistant',content:'Understood.'},...hist.slice(-5).filter((m,i)=>!(i===0&&m.role==='assistant'))];
   const r=await s(prompt,{cache:false,modelTier:'quick',onText:({text})=>{b.textContent=text}});out=r.text}
  catch(e){out=local(q)}
  b.textContent=out;hist.push({role:'assistant',content:out});msgs.scrollTop=1e9}
-$('f').onsubmit=ask;$('send').onclick=ask;
+$('f').onsubmit=e=>{e.preventDefault();ask();return false};
 // ---------- User data entry + AI analysis ----------
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 $('ig').innerHTML=H.map((h,i)=>`<label class="iv"><span>${h}–${String((+h+2)%24).padStart(2,'0')}h</span><input type="number" min="0" max="100" step="0.01" inputmode="decimal" placeholder="kWh" data-i="${i}"></label>`).join('');
